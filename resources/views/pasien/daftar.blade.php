@@ -151,11 +151,13 @@
             options.forEach(option => {
                 const sesuai = poli !== '' && option.dataset.poli === poli;
 
-                option.hidden = !sesuai;
-                option.disabled = !sesuai;
-
                 if (sesuai) {
+                    option.style.display = 'block';
+                    option.disabled = false;
                     jumlahTersedia++;
+                } else {
+                    option.style.display = 'none';
+                    option.disabled = true;
                 }
             });
 
@@ -166,18 +168,22 @@
                 return;
             }
 
-            select.disabled = jumlahTersedia === 0;
+            select.disabled = false; // Selalu aktifkan jika poli dipilih agar bisa melihat pesan "Belum ada jadwal"
 
             // kosongkan pilihan jika jadwal yang dipilih tidak termasuk poli ini
             const terpilih = select.options[select.selectedIndex];
 
-            if (terpilih && terpilih.disabled) {
+            if (terpilih && terpilih.disabled && terpilih.value !== '') {
                 select.value = '';
             }
 
-            info.textContent = jumlahTersedia === 0 ?
-                'Belum ada jadwal dokter untuk poli ini.' :
-                jumlahTersedia + ' jadwal dokter tersedia.';
+            if (jumlahTersedia === 0) {
+                info.textContent = 'Belum ada jadwal dokter untuk poli ini.';
+                info.className = 'text-xs text-red-500 mt-1';
+            } else {
+                info.textContent = jumlahTersedia + ' jadwal dokter tersedia.';
+                info.className = 'text-xs text-slate-400 mt-1';
+            }
         }
 
         function validasiForm() {

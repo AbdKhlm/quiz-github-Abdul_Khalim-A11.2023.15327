@@ -17,8 +17,9 @@
     <div class="card bg-base-100 shadow-md rounded-2xl border border-slate-200">
         <div class="card-body p-8">
 
-            <form action="{{ route('obat.store') }}" method="POST">
+            <form action="{{ route('obat.update', $obat->id) }}" method="POST">
                 @csrf
+                @method('PUT')
 
                 {{-- Grid --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -28,7 +29,7 @@
                         <label class="block text-sm font-semibold text-slate-700 mb-1">
                             Nama Obat <span class="text-red-500">*</span>
                         </label>
-                        <input type="text" name="nama_obat" value="{{ old('nama_obat') }}"
+                        <input type="text" name="nama_obat" value="{{ old('nama_obat', $obat->nama_obat) }}"
                             placeholder="Masukkan nama obat..." class="w-full px-4 py-2 border-2 rounded-lg p-2
                                       focus:border-primary focus:outline-none
                                       @error('nama_obat') border-red-500 @enderror" required>
@@ -42,7 +43,7 @@
                         <label class="block text-sm font-semibold text-slate-700 mb-1">
                             Kemasan
                         </label>
-                        <input type="text" name="kemasan" value="{{ old('kemasan') }}"
+                        <input type="text" name="kemasan" value="{{ old('kemasan', $obat->kemasan) }}"
                             placeholder="Contoh: Strip, Botol, Tube..." class="w-full px-4 py-2 border-2 rounded-lg p-2
                                       focus:border-primary focus:outline-none
                                       @error('kemasan') border-red-500 @enderror">
@@ -51,27 +52,31 @@
                         @enderror
                     </div>
 
-                </div>
-
-                {{-- Harga --}}
-                <div class="mb-8">
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">
-                        Harga <span class="text-red-500">*</span>
-                    </label>
-
-                    <div class="flex items-center border-2 rounded-lg p-2 px-4 py-2
-                                focus-within:border-primary">
-                        <span class="text-slate-500 text-sm font-semibold mr-2">
-                            Rp
-                        </span>
-                        <input type="number" name="harga" value="{{ old('harga') }}" placeholder="0" min="0" step="1"
-                            class="w-full focus:outline-none
-                                      @error('harga') border-red-500 @enderror" required>
+                    {{-- Harga --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">
+                            Harga <span class="text-red-500">*</span>
+                        </label>
+                        <div class="flex items-center border-2 rounded-lg px-4 py-2 focus-within:border-primary @error('harga') border-red-500 @enderror">
+                            <span class="text-slate-500 text-sm font-semibold mr-2">Rp</span>
+                            <input type="number" name="harga" value="{{ old('harga', $obat->harga) }}" placeholder="0" min="0" step="1" class="w-full focus:outline-none" required>
+                        </div>
+                        @error('harga')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
-                    @error('harga')
-                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                    @enderror
+                    {{-- Stok --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">
+                            Stok <span class="text-red-500">*</span>
+                        </label>
+                        <input type="number" name="stok" value="{{ old('stok', $obat->stok) }}" placeholder="0" min="0" step="1" class="w-full px-4 py-2 border-2 rounded-lg focus:border-primary focus:outline-none @error('stok') border-red-500 @enderror" required>
+                        @error('stok')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                 </div>
 
                 {{-- Buttons --}}
@@ -80,7 +85,7 @@
                                hover:bg-primary/90 text-white 
                                font-semibold text-sm transition">
                         <i class="fas fa-save mr-1"></i>
-                        Simpan
+                        Update
                     </button>
 
                     <a href="{{ route('obat.index') }}" class="px-6 py-2.5 rounded-xl bg-slate-100 

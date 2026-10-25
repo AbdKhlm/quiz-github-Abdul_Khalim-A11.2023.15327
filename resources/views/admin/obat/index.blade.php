@@ -6,13 +6,21 @@
             Data Obat
         </h2>
 
-        <a href="{{ route('obat.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 
-                  bg-primary hover:bg-primary/90 
-                  text-white text-sm font-semibold 
-                  rounded-xl transition">
-            <i class="fas fa-plus text-xs"></i>
-            Tambah Obat
-        </a>
+        <div class="inline-flex items-center gap-2">
+            <a href="{{ route('admin.obat.export') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 
+                      text-white rounded-xl text-sm font-semibold transition">
+                <i class="fas fa-file-excel text-sm"></i>
+                Export Excel
+            </a>
+
+            <a href="{{ route('obat.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 
+                      bg-primary hover:bg-primary/90 
+                      text-white text-sm font-semibold 
+                      rounded-xl transition">
+                <i class="fas fa-plus text-xs"></i>
+                Tambah Obat
+            </a>
+        </div>
     </div>
 
     {{-- Card --}}
@@ -27,6 +35,7 @@
                         <tr>
                             <th class="px-6 py-4">Nama Obat</th>
                             <th class="px-6 py-4">Kemasan</th>
+                            <th class="px-6 py-4 text-center">Stok</th>
                             <th class="px-6 py-4">Harga</th>
                             <th class="px-6 py-4 text-right">Aksi</th>
                         </tr>
@@ -45,6 +54,12 @@
                                 <span class="inline-block px-3 py-1 text-xs font-semibold 
                                              rounded-full bg-green-100 text-green-600">
                                     {{ $obat->kemasan ?? '-' }}
+                                </span>
+                            </td>
+
+                            <td class="px-6 py-4 text-center">
+                                <span class="font-semibold {{ $obat->stok <= 5 ? 'text-red-500' : 'text-slate-800' }}">
+                                    {{ $obat->stok }}
                                 </span>
                             </td>
 

@@ -81,6 +81,12 @@
                 <i class="fas fa-pills w-4 text-center"></i>
                 Manajemen Obat
             </a>
+
+            <a href="{{ route('admin.pembayaran.index') }}"
+                class="{{ $baseLink }} {{ request()->routeIs('admin.pembayaran.*') ? $active : $inactive }}">
+                <i class="fas fa-money-bill-transfer w-4 text-center"></i>
+                Verifikasi Bayar
+            </a>
         @endif
 
 
@@ -106,6 +112,20 @@
             class="{{ ($baseLink ?? '') . (request()->routeIs('pasien.daftar') ? $active : $inactive) }}">
             <i class="fas fa-house-medical w-4 text-center"></i>
             Pendaftaran Periksa
+        </a>
+
+        
+        <a href="{{ route('pasien.riwayat.index') }}"
+            class="{{ $baseLink }} {{ request()->routeIs('pasien.riwayat.*') ? $active : $inactive }}">
+            <i class="fas fa-clock-rotate-left w-4 text-center"></i>
+            Riwayat Pendaftaran
+        </a>
+
+
+        <a href="{{ route('pasien.pembayaran.index') }}"
+            class="{{ ($baseLink ?? '') . (request()->routeIs('pasien.pembayaran.*') ? $active : $inactive) }}">
+            <i class="fas fa-receipt w-4 text-center"></i>
+            Pembayaran
         </a>
         @endif
 
@@ -148,7 +168,13 @@
 
 
     {{-- ================= LOGOUT ================= --}}
-    <div class="p-4 border-t border-white/10">
+    <div class="p-4 border-t border-white/10 space-y-2">
+        <a href="{{ route('profile.index') }}"
+            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-all">
+            <i class="fas fa-user-gear w-4"></i>
+            Profil Saya
+        </a>
+
         <form method="POST" action="/logout">
             @csrf
             <button type="submit"

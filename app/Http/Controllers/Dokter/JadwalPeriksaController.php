@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Dokter;
 
 use App\Http\Controllers\Controller;
 use App\Models\JadwalPeriksa;
+use App\Exports\JadwalPeriksaExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -69,5 +71,10 @@ class JadwalPeriksaController extends Controller
         return redirect()->route('jadwal-periksa.index')
             ->with('message', 'Berhasil Melakukan Hapus Data')
             ->with('type', 'success');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new JadwalPeriksaExport(Auth::id()), 'jadwal-periksa.xlsx');
     }
 }

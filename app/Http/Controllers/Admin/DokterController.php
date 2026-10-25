@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Poli;
 use App\Models\User;
+use App\Exports\DokterExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -95,5 +97,10 @@ class DokterController extends Controller
         return redirect()->route('dokter.index')
             ->with('message', 'Data Dokter Berhasil dihapus')
             ->with('type', 'success');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new DokterExport, 'data-dokter.xlsx');
     }
 }

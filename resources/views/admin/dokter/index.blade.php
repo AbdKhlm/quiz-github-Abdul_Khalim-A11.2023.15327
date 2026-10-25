@@ -6,11 +6,19 @@
             Data Dokter
         </h2>
 
-        <a href="{{ route('dokter.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary/90 
-                  text-white rounded-xl text-sm font-semibold transition">
-            <i class="fas fa-plus text-sm"></i>
-            Tambah Dokter
-        </a>
+        <div class="inline-flex items-center gap-2">
+            <a href="{{ route('admin.dokter.export') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 
+                      text-white rounded-xl text-sm font-semibold transition">
+                <i class="fas fa-file-excel text-sm"></i>
+                Export Excel
+            </a>
+            
+            <a href="{{ route('dokter.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary/90 
+                      text-white rounded-xl text-sm font-semibold transition">
+                <i class="fas fa-plus text-sm"></i>
+                Tambah Dokter
+            </a>
+        </div>
     </div>
 
     {{-- Card Table --}}
