@@ -2,6 +2,13 @@
     <div class="py-8">
         <h2 class="text-2xl font-bold text-slate-800 mb-8">Riwayat Pemeriksaan & Pembayaran</h2>
 
+        @if($errors->any())
+            <div class="alert alert-error mb-6 rounded-xl shadow-sm">
+                <i class="fas fa-circle-xmark"></i>
+                <span>{{ $errors->first() }}</span>
+            </div>
+        @endif
+
         <div class="grid grid-cols-1 gap-6">
             @forelse($pemeriksaans as $periksa)
                 <div class="card bg-base-100 shadow-xl border border-slate-200 rounded-2xl overflow-hidden">
@@ -13,19 +20,19 @@
                                         {{ \Carbon\Carbon::parse($periksa->tgl_periksa)->format('d F Y') }}
                                     </span>
                                     <div class="badge badge-outline 
-                                        {{ $periksa->status_pembayaran == 'terbayar' ? 'badge-success' : ($periksa->status_pembayaran == 'verifikasi' ? 'badge-info' : 'badge-warning') }}">
-                                        {{ strtoupper($periksa->status_pembayaran) }}
+                                        {{ $periksa->status_pembayaran == 'paid' ? 'badge-success' : ($periksa->status_pembayaran == 'verification' ? 'badge-info' : 'badge-warning') }}">
+                                        {{ $periksa->status_pembayaran == 'paid' ? 'LUNAS' : ($periksa->status_pembayaran == 'verification' ? 'MENUNGGU VERIFIKASI' : 'BELUM BAYAR') }}
                                     </div>
                                 </div>
 
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                                     <div>
                                         <p class="text-slate-400 font-medium">Poli</p>
-                                        <p class="font-bold text-slate-800">{{ $periksa->daftarPoli->jadwalPeriksa->dokter->poli->nama_poli ?? '-' }}</p>
+                                        <p class="font-bold text-slate-800">{{ $periksa->daftarPoli?->jadwalPeriksa?->dokter?->poli?->nama_poli ?? '-' }}</p>
                                     </div>
                                     <div>
                                         <p class="text-slate-400 font-medium">Dokter</p>
-                                        <p class="font-bold text-slate-800">{{ $periksa->daftarPoli->jadwalPeriksa->dokter->nama ?? '-' }}</p>
+                                        <p class="font-bold text-slate-800">{{ $periksa->daftarPoli?->jadwalPeriksa?->dokter?->nama ?? '-' }}</p>
                                     </div>
                                     <div class="col-span-full">
                                         <p class="text-slate-400 font-medium">Catatan Dokter</p>
@@ -37,19 +44,30 @@
                             <div class="w-full md:w-64 flex flex-col justify-center items-center bg-slate-50 rounded-xl p-6 border border-slate-100">
                                 <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1">Total Biaya</p>
                                 <p class="text-2xl font-black text-[#2d4499]">Rp {{ number_format($periksa->biaya_periksa, 0, ',', '.') }}</p>
-                                
-                                @if($periksa->status_pembayaran == 'menunggu pembayaran')
+
+                                @if($periksa->bukti_bayar)
+                                    <a href="{{ asset('storage/' . $periksa->bukti_bayar) }}" target="_blank"
+                                        class="btn btn-ghost btn-xs mt-3 text-primary">
+                                        <i class="fas fa-image mr-1"></i> Lihat Bukti Bayar
+                                    </a>
+                                @endif
+
+                                @if($periksa->status_pembayaran == 'pending')
                                     <form action="{{ route('pasien.pembayaran.upload', $periksa->id) }}" method="POST" enctype="multipart/form-data" class="mt-4 w-full">
                                         @csrf
                                         <div class="form-control w-full">
                                             <label class="label p-0 mb-1">
                                                 <span class="label-text-alt font-bold">Upload Bukti Bayar</span>
                                             </label>
-                                            <input type="file" name="bukti_bayar" class="file-input file-input-bordered file-input-primary file-input-sm w-full rounded-lg" required />
+                                            <input type="file" name="bukti_bayar" accept="image/jpeg,image/png"
+                                                class="file-input file-input-bordered file-input-primary file-input-sm w-full rounded-lg" required />
+                                            <label class="label p-0 pt-1">
+                                                <span class="label-text-alt text-slate-400">JPG/PNG, maksimal 2 MB</span>
+                                            </label>
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-sm btn-block mt-3 rounded-lg font-bold">Unggah Bukti</button>
                                     </form>
-                                @elseif($periksa->status_pembayaran == 'verifikasi')
+                                @elseif($periksa->status_pembayaran == 'verification')
                                     <div class="mt-4 text-center">
                                         <span class="text-xs text-info font-bold animate-pulse">Menunggu Verifikasi Admin</span>
                                     </div>

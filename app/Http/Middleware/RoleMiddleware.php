@@ -14,7 +14,15 @@ class RoleMiddleware
         $user = Auth::user();
 
         if ($user->role !== $role) {
-            return response('Unauthorized.', 403);
+            // Jika role tidak sesuai, arahkan ke dashboard masing-masing role
+            $dashboardRoute = match($user->role) {
+                'admin' => 'admin.dashboard',
+                'dokter' => 'dokter.dashboard',
+                'pasien' => 'pasien.dashboard',
+                default => 'login',
+            };
+
+            return redirect()->route($dashboardRoute)->with('error', 'Anda tidak memiliki akses ke halaman tersebut. Anda telah dialihkan ke dashboard sesuai role Anda.');
         }
 
         return $next($request);

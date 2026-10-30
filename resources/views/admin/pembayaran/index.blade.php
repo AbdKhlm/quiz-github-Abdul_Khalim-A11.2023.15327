@@ -19,12 +19,12 @@
                         @forelse($pemeriksaans as $periksa)
                             <tr class="hover:bg-slate-50/50 transition-colors">
                                 <td class="py-5 px-6">
-                                    <div class="font-bold text-slate-800">{{ $periksa->daftarPoli->pasien->nama }}</div>
-                                    <div class="text-xs text-slate-400">No. RM: {{ $periksa->daftarPoli->pasien->no_rm }}</div>
+                                    <div class="font-bold text-slate-800">{{ $periksa->daftarPoli?->pasien?->nama ?? '-' }}</div>
+                                    <div class="text-xs text-slate-400">No. RM: {{ $periksa->daftarPoli?->pasien?->no_rm ?? '-' }}</div>
                                 </td>
                                 <td class="py-5 px-6">
-                                    <div class="font-semibold text-slate-700">{{ $periksa->daftarPoli->jadwalPeriksa->dokter->nama }}</div>
-                                    <div class="text-xs text-slate-400">{{ $periksa->daftarPoli->jadwalPeriksa->dokter->poli->nama_poli }}</div>
+                                    <div class="font-semibold text-slate-700">{{ $periksa->daftarPoli?->jadwalPeriksa?->dokter?->nama ?? '-' }}</div>
+                                    <div class="text-xs text-slate-400">{{ $periksa->daftarPoli?->jadwalPeriksa?->dokter?->poli?->nama_poli ?? '-' }}</div>
                                 </td>
                                 <td class="py-5 px-6 text-sm">
                                     {{ \Carbon\Carbon::parse($periksa->tgl_periksa)->format('d/m/Y') }}
